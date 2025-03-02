@@ -2,6 +2,19 @@ from .models import Comments
 from django import forms
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                              'id': 'inputLogin',
+                                                              'placeholder': 'Логін'
+                                                               }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'type': 'password',
+                                                                  'class': 'form-control',
+                                                                  'id': 'inputPassword',
+                                                                  'placeholder': 'Пароль'
+                                                                   }))
+    
+
+
 class CommentForm(forms.Form):
     name = forms.CharField(max_length=25, widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'id': 'nameInput'

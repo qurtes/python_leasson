@@ -1,5 +1,7 @@
+from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from django.db.models import Count
@@ -10,7 +12,31 @@ from django.views.generic import ListView
 from taggit.models import Tag
 
 from .models import Post, PostPoint, Comments
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, LoginForm
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request,
+                                username=cd['username'],
+                                password=cd['password'])
+
+            if user is not None:
+                if user.is_activate():
+                    login(request, user)
+                    return HttpResponse('Authenticate successfully')
+                else:
+                    return HttpResponse('Disabled account')
+
+            else:
+                return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+
+    return render (request, 'blog/account/login.html', {'from': form})
 
 
 def post_share(request, post_id):
@@ -83,7 +109,7 @@ def post_detail(request, year, month, day, post):
 
     else:
         comment_form = CommentForm()
-    
+
     post_tags_ids = post_object.tags.values_list('id', flat=True)
     similar_posts = Post.objects.filter(tags__in=post_tags_ids, status='published').exclude(id=post_object.id)
 
