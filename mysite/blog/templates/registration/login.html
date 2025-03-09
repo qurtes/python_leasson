@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %} 
+{% load bootstrap %}
+{% block title %} 
+    Логін 
+{%endblock title %}
+
+{% block content %}
+    <div class="container text-center sign-in">
+        {% if from.erorrs %}
+            <p>Невірно ведений логін або пароль</p>
+        {% else %}
+            <h1 class = 'h3 md-3 font-weight-normal'>Будь ласка авторизуйтесь</h1>
+        {% endif %}
+        <form action="." class="from-sign-in" method="post">
+
+            {{ form.username|bootstrap }}
+            {{ form.password|bootstrap }}
+            {% csrf_token %}
+            <input type='hidden' name='next' value='{{ next }}'>
+            <button class="btn bth-lg bth-primary mt-2" type="submit">
+                Війти
+            </button>
+        </form>
+    </div>
+{% endblock content %}

@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from django.db.models import Count
 # Create your views here.
@@ -57,7 +58,7 @@ def post_share(request, post_id):
 
     return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
 
-
+@login_required
 def post_list(request, tag_slug=None):
     object_list = Post.objects.all()
 
@@ -121,3 +122,7 @@ def post_detail(request, year, month, day, post):
                                                      'comment_form': comment_form,
                                                      'similar_posts': similar_posts
                                                      })
+
+@login_required
+def dashboard(request):
+    return render(request, 'blog/account/dashboard.html')

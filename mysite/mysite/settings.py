@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'taggit',
     'bootstrapform',
+    'django.contrib.admin',
 
 ]
 
@@ -130,3 +131,7 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+LOGIN_REDIRECT_URL = 'blog:post_list'
+LOGIN_URL = 'blog:login'
+LOGOUT_URL = 'blog:logout'
