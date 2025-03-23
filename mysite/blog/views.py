@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.transaction import commit
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,7 @@ from django.views.generic import ListView
 from taggit.models import Tag
 
 from .models import Post, PostPoint, Comments
-from .forms import EmailPostForm, CommentForm, LoginForm
+from .forms import EmailPostForm, CommentForm, LoginForm, PostForm
 
 
 def user_login(request):
@@ -123,10 +124,25 @@ def post_detail(request, year, month, day, post):
                                                      'similar_posts': similar_posts
                                                      })
 
-@login_required
+@login_required()
 def dashboard(request):
     user = request.user
     posts_pub = Post.objects.filter(author=user, status='published')
     posts_draft = Post.objects.filter(author=user, status='draft')
     return render(request, 'blog/account/dashboard.html', {'posts_pub': posts_pub,
                                                                                 'posts_draft': posts_draft})
+
+@login_required()
+def post_add(request):
+    user = request.user
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = user
+            print(post)
+            post.save()
+    else:
+        form = PostForm()
+
+    return render(request, 'blog/account/post_add.html', {'form': form})

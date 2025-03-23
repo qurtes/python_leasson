@@ -5,9 +5,14 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
-
+from slugify import slugify
 
 class Post(models.Model):
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(Post, self).save(*args, **kwargs)
+
     STATUS_CHOICES = (
         ('draft', 'Draft'),
         ('published', 'Published')
