@@ -140,8 +140,9 @@ def post_add(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = user
-            print(post)
             post.save()
+            for tag in form.cleaned_data['tags']:
+                post.tags.add(tag)
     else:
         form = PostForm()
 
