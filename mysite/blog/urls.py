@@ -13,5 +13,9 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LoginView.as_view(), name='logout'),
     path('dashboard/',views.dashboard, name='dashboard'),
-    path('post-add/', views.post_add, name='post_add')
+    path('post-add/', views.post_add, name='post_add'),
+    path('post-edit/<int:post_id>', views.post_edit, name='post_edit'),
+    path('post-delete/<int:post_id>', views.post_delete, name='post_delete'),
+    path('post_point_list/<int:post_id>', views.post_point_list, name='post_point_list'),
+
 ]

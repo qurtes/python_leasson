@@ -1,10 +1,10 @@
 {% extends 'blog/base_accounts.html' %}
 {% block title %}
-    Личный кабинет
+    Особистий кабинет
 {% endblock %}
 {% block account_content %}
     {% if posts_pub %}
-        <h2 class="text-center mb-4">Мои опубликованые рецепты:</h2>
+        <h2 class="text-center mb-4">Мої опубліковані рецепти:</h2>
         <div class="card-deck">
             <div class="row row-cols-3 row-cols-md-3">
                 {% for post in posts_pub %}
@@ -34,14 +34,12 @@
                                     {% endfor %}
                                 </p>
 
-                                <a class="btn btn-primary m-2"
-                                   {% comment %} href="{% url 'blog:post_point_list' post.id %}" {% endcomment %}
-                                   >
-                                    Этапы готовки
+                                <a class="btn btn-primary m-2" href="{% url 'blog:post_point_list' post.id %}">
+                                    Етапи готовки
                                 </a>
                                 <a class="btn btn-primary m-2"
-                                   href="#">Редактировать</a>
-                                <a class="btn btn-danger m-2" href="#">Удалить</a>
+                                   href="{% url "blog:post_edit" post.id %}">Редагувати</a>
+                                <a class="btn btn-danger m-2" href="{% url "blog:post_delete" post.id %}">Bидалить</a>
                             </div>
                         </div>
                     </div>
@@ -51,7 +49,7 @@
 
     {% endif %}
     {% if posts_draft %}
-        <h2 class="text-center mb-4">Рецепты которые проходят модерацию</h2>
+        <h2 class="text-center mb-4">Рецепти які проходят модерацію</h2>
         <div class="card-deck">
             <div class="row row-cols-3 row-cols-md-3">
                 {% for post in posts_draft %}
@@ -67,7 +65,7 @@
                                 <p class="card-text">{{ post.short_description|truncatewords:25 }}</p>
                             </div>
                             <div class="card-footer">
-                                <small class="text-muted">Опубликовано {{ post.publish }}.
+                                <small class="text-muted">Опубліковано {{ post.publish }}.
                                     Автор {{ post.author }}</small>
 
                                 <p> Теги:
@@ -82,11 +80,11 @@
                                 </p>
 
                                 <a class="btn btn-primary m-2" href="#">
-                                    Этапы готовки
+                                    Етапи готовки
                                 </a>
                                 <a class="btn btn-primary m-2"
-                                   href="#">Редактировать</a>
-                                <a class="btn btn-danger m-2" href="#">Удалить</a>
+                                   href="{% url "blog:post_edit" post.id %}">Редагувати</a>
+                                <a class="btn btn-danger m-2" href="{% url "blog:post_delete" post.id %}">Видалити</a>
                             </div>
                         </div>
                     </div>
