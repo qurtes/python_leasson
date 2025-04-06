@@ -13,8 +13,8 @@ from django.views.generic import ListView
 
 from taggit.models import Tag
 
-from .models import Post, PostPoint, Comments
-from .forms import EmailPostForm, CommentForm, LoginForm, PostForm
+from .models import Post, PostPoint, Comments, save_images
+from .forms import EmailPostForm, CommentForm, LoginForm, PostForm, PostPointForm
 
 
 def user_login(request):
@@ -153,7 +153,7 @@ def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post_edit_form = PostForm(instance=post)
     if request.method == 'POST':
-        post_edit_form = PostForm(request.POST, instance=post)
+        post_edit_form = PostForm(request.POST, request.FILES , instance=post)
         if post_edit_form.is_valid():
             post_edit_form.save()
     return render(request, 'blog/account/post_edit.html', {'form': post_edit_form,
@@ -174,3 +174,34 @@ def post_point_list(request, post_id):
     post_points = PostPoint.objects.filter(post=post)
     return render(request, 'blog/account/post_points.html',  {'post': post,
                                                                            'post_points': post_points})
+
+@login_required
+def post_point_add(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    form = PostPointForm()
+
+    if request.method == 'POST':
+        form = PostPointForm(request.POST, request.FILES)
+        if form.is_valid():
+            post_point = form.save(commit=False)
+            post_point.post = post
+            post_point.save()
+    return render(request, 'blog/account/post_point_add.html', {'form': form,
+                                                                                    'post': post})
+
+
+@login_required
+def post_point_edit(request, post_point_id):
+    post_point = get_object_or_404(PostPoint, id=post_point_id)
+    post = get_object_or_404(Post, id=post_point.post.id)
+    form = PostPointForm(instance=post_point)
+
+    if request.method == 'POST':
+        form = PostPointForm(request.POST, request.FILES, instance=post_point)
+        if form.is_valid():
+            form.save()
+    return render(request, 'blog/account/post_point_edit.html', {'form': form,
+                                                                                     'post_point': post_point,
+                                                                                     'post': post})
+
+

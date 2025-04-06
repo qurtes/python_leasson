@@ -1,25 +1,29 @@
-from .models import Comments, Post
+from .models import Comments, Post, PostPoint
 from django import forms
+
+
+class PostPointForm(forms.ModelForm):
+    class Meta:
+        model = PostPoint
+        fields = ("post_point_text", "post_images", "post_header")
 
 
 class PostForm(forms.ModelForm):
     class Meta:
-        model=Post
-        fields= ("title", 'short_description', 'image', 'tags')
-
+        model = Post
+        fields = ("title", 'short_description', 'image', 'tags')
 
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
-                                                              'id': 'inputLogin',
-                                                              'placeholder': 'Логін'
-                                                               }))
+                                                             'id': 'inputLogin',
+                                                             'placeholder': 'Логін'
+                                                             }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'type': 'password',
-                                                                  'class': 'form-control',
-                                                                  'id': 'inputPassword',
-                                                                  'placeholder': 'Пароль'
-                                                                   }))
-    
+                                                                 'class': 'form-control',
+                                                                 'id': 'inputPassword',
+                                                                 'placeholder': 'Пароль'
+                                                                 }))
 
 
 class CommentForm(forms.Form):

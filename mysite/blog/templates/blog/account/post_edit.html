@@ -22,7 +22,7 @@
             <h1 class='h3 mb-3 font-weight-normal'>Пост успішно змінений</h1>
             <h2 class='mb-3 font-weight-normal'>Ви зможете:</h2>
             <a href='{% url "blog:dashboard" %}' class= 'btn bth-dark'>Повернутися до списків постів</a>
-            <a href='{% url "blog:post_edit" %}' class= 'btn bth-dark'>Редагувати пост</a>
+            <a href='{% url "blog:post_edit" post.id %}' class= 'btn bth-dark'>Редагувати пост</a>
 
         {% else %}
             <h1 class='h3 mb-3 font-weight-normal'>Будь ласка заповніть поля</h1>

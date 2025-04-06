@@ -6,7 +6,7 @@
 {% block account_content %}
     <div class='title-post-point-page'>
         <h2 class=text-center mb-4>Етапи готовки рецепта: {{ post.title }}</h2>
-        <a class='bth bth-primary m-2 add-point' href-'#'>Додати етап</a>
+        <a class='bth bth-primary m-2 add-point' href='{% url "blog:post_point_add" post.id %}'>Додати етап</a>
     </div>
 
     <div class='card-deck'>
@@ -14,9 +14,9 @@
             {% for p_p in post_points %}
                 <div class='col mb-4'>
                     <div class='card' style='heigth : 100%'> 
-                        {% if p_p.post_point_image %}
+                        {% if p_p.post_images %}
                             <a href ='{{ post.get_ablosute_url }}'>
-                                <img src='{{ MEDIA_URL }}{{p_p.post_point_image.url}}}' class='card-img-top' alt='...'>
+                                <img src='{{ MEDIA_URL }}{{p_p.post_images.url}}' class='card-img-top' alt='...'>
                             </a>
                         {% else %}
                             <a href="{{ post.get_absolute_url }}">
@@ -27,7 +27,7 @@
                     <div class='card-body'>
                         <a href='#'>
                             <h5 class='card-title'>
-                                {{ p_p.post_point_header }}
+                                {{ p_p.post_header }}
                             </h5>
                         </a>
                         <p class='card-text'>
@@ -35,7 +35,7 @@
                         </p>
                     </div>
                     <div class='card-footer'>
-                        <a class='btn btn-primary m-2' href='#'>Редагувати</a>
+                        <a class='btn btn-primary m-2' href='{% url "blog:post_point_edit" p_p.id %}'>Редагувати</a>
                         <a class='btn btn-danger m-2' href='#'>Видалити</a>
 
                     </div>
