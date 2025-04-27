@@ -36,7 +36,7 @@
                     </div>
                     <div class='card-footer'>
                         <a class='btn btn-primary m-2' href='{% url "blog:post_point_edit" p_p.id %}'>Редагувати</a>
-                        <a class='btn btn-danger m-2' href='#'>Видалити</a>
+                        <a class='btn btn-danger m-2' href='{% url "blog:post_point_delete" p_p.id %}'>Видалити</a>
 
                     </div>
                 </div>

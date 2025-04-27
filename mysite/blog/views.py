@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.transaction import commit
@@ -14,7 +15,7 @@ from django.views.generic import ListView
 from taggit.models import Tag
 
 from .models import Post, PostPoint, Comments, save_images
-from .forms import EmailPostForm, CommentForm, LoginForm, PostForm, PostPointForm
+from .forms import EmailPostForm, CommentForm, LoginForm, PostForm, PostPointForm, UserCreateForm
 
 
 def user_login(request):
@@ -203,5 +204,25 @@ def post_point_edit(request, post_point_id):
     return render(request, 'blog/account/post_point_edit.html', {'form': form,
                                                                                      'post_point': post_point,
                                                                                      'post': post})
+@login_required
+def post_point_delete(required, post_point_id):
+    try:
+        post_point = get_object_or_404(PostPoint, id=post_point_id)
 
+        post_point.delete()
+        return redirect('blog:post_point_list' ,  post_id=post_point.post.id)
+    except PostPoint.DoesNotExist:
+        return redirect('blog:post_list')
 
+def sign_up(request):
+    user_form = UserCreateForm()
+    if request.method == 'POST':
+        user_form = UserCreateForm(request.POST)
+        if user_form.is_valid():
+            new_user = User.objects.create_user(**user_form.cleaned_data)
+            new_user.save()
+            login(request, authenticate(username=user_form.cleaned_data['username'],
+                                        password=user_form.cleaned_data['password']))
+            return redirect('blog:post_list')
+
+    return render(request, 'registration/sing_up.html', {'user_form': user_form})
