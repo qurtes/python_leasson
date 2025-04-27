@@ -115,3 +115,20 @@ p.date {
 nav{
     background-color: #574b60;
 }
+
+.log-img {
+    height: 60px;
+}
+
+.account-content {
+    margin: 0 auto;
+}
+
+.add-point {
+    display: block;
+    margin: 0 auto;
+}
+
+.search-form label{
+    display: none;
+}
