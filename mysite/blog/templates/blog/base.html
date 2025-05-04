@@ -29,7 +29,7 @@
             <span class='user'>
               {% if request.user.is_authenticated %}
                 <a href='{% url "blog:dashboard" %}' class='pr-3'>
-                  {{ request.user.first_name }}
+                  Особистий кабінет
                 </a>
                 {% comment %} <a href='{% url "blog:logout" %}'>Вийти</a> {% endcomment %}
                 <form method="POST" action="{% url 'blog:logout' %}" style="display:inline;">
