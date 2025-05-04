@@ -6,7 +6,7 @@ app_name = 'blog'
 urlpatterns = [
     path('', views.post_list, name='post_list'),
     # path('', views.PostListView.as_view(), name='post_list'),
-    path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail'),
+    path('<int:year>/<int:month>/<int:day>/<slug:post>/<int:post_id>/', views.post_detail, name='post_detail'),
     path('<int:post_id>/share/', views.post_share, name='post_share'),
     path('tag/<slug:tag_slug>', views.post_list, name='post_list_by_tag'),
     # path('login', views.user_login, name='login'),
@@ -21,6 +21,12 @@ urlpatterns = [
     path('post_point_edit/<int:post_id>/', views.post_point_edit, name='post_point_edit'),
     path('post_point_delete/<int:post_point_id>/', views.post_point_delete, name='post_point_delete'),
     path('sign-up/', views.sign_up, name='sign_up'),
-    path('profile/', views.edit_profile, name='edit_profile')
+    path('profile/', views.edit_profile, name='edit_profile'),
+    path('add_to_favourite/<int:post_id>/', views.add_to_favourite, name='add_to_favourite'),
+    path('delete_from_favourite/<int:post_id>/', views.delete_from_favourite, name='delete_from_favourite'),
+    path('favourite_posts/', views.favourite_posts, name='favourite_posts'),
+    path('delete_from_favourite_in_dashboard/<int:post_id>/', views.delete_from_favourite_in_dashboard,
+         name='delete_from_favourite_in_dashboard'),
+
 
 ]

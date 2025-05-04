@@ -1,4 +1,7 @@
 {% extends "blog/base.html" %}
+{% load static %}
+{% load bootstrap %}
+
 {% block title %}
     {{post.title}}
 {% endblock title %}
@@ -6,7 +9,21 @@
 <div class="container my-3">
     <div class="card-deck">
         <div class='card'>
-                <img src="{{ MEDIA_URL}}{{post.image.url}}" class="card-img-top" alt="...">
+            <div class='row'>
+                <img src="{{ MEDIA_URL}}{{post.image.url}}" class="card-img-top detail-image-size" alt="...">
+            
+                <div class='favorite'>
+                    {% if post in request.user.fav_posts.all %}
+                        <a href='{% url "blog:delete_from_favourite" post.id %}'>
+                            <img src='{% static "img/Star_yellow.jpg" %}' alt=''>
+                        </a>
+                    {% else %}
+                        <a href='{% url "blog:add_to_favourite" post.id %}'>
+                            <img src='{% static "img/Star_empty.jpg" %}' alt=''>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
             <div class="card-body">
                 <h5 class="card-title">{{ post.title }}</h5>
                 <p class="card-text">{{ post.short_description }}</p>
@@ -32,19 +49,38 @@
             <div class="card-footer">
                 <small class="text-body-secondary">Опубліковано {{ post.publish }}. Автор {{ post.author }}</small>
             </div>
-        </div>
-    </div>
-    <h2>Similar posts</h2>
-    {% for post in similar_posts %}
+        
+    {% comment %} <h2>Similar posts</h2> {% endcomment %}
+    {% comment %} {% for post in similar_posts %}
         <p>
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </p>
     {% empty %}
         There are no similar posts yet.
-    {% endfor %}
+    {% endfor %} {% endcomment %}
+    {% if similar_posts %}
+        <h2 class='text-center-md-3'>Схожі статі</h2>
+        <div class='row row-cols-1 row-cols-md-3'>
+            {% for post in similar_post  %}
+                <div class='col md-4'>
+                    <div>
+                        <img src="{{ MEDIA_URL }}{{ post.image.url }}" class='card-img-top detail-image-size'
+                        alt='...'>
+                        <div class='card-boby'>
+                            <h5 class='card-title'> 
+                                 <a href ="{{ post.get_absolute_url }}">{{ post.title|truncatechars:70 }} 
+                                 </a>   
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
 
     {% with comments.count as total_comments  %}
-        <h2>{{ total_comments }} коментарiв</h2>
+        <h2 class='text-center'>{{ total_comments }} коментарiв</h2>
     {% endwith %}
 
     {% for comment in comments %}
@@ -81,6 +117,8 @@
                 {% csrf_token %}
             </form>            
         {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 

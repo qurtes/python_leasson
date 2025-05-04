@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.context_processors import request
 
 # Create your models here.
 from django.utils import timezone
@@ -31,6 +32,8 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft',
                               verbose_name='Статус публікації')
     image = models.ImageField(upload_to='product_images/', blank=False, verbose_name='Зображення')
+    favourite = models.ManyToManyField(User, related_name='fav_posts', blank=True)
+
 
     class Meta:
         ordering = ('-publish',)
@@ -44,7 +47,8 @@ class Post(models.Model):
         return reverse('blog:post_detail', args=[self.publish.year,
                                                  self.publish.month,
                                                  self.publish.day,
-                                                 self.slug])
+                                                 self.slug,
+                                                 self.id])
 
 
 def save_images(instance, filename):

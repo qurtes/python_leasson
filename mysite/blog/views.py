@@ -1,6 +1,7 @@
 from re import search
 
 from Tools.scripts.texi2html import increment
+from Tools.scripts.var_access_benchmark import read_dict
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -111,12 +112,13 @@ class PostListView(ListView):
     paginate_by = 3
     template_name = 'blog/post/list.html'
 
-
-def post_detail(request, year, month, day, post):
+@login_required
+def post_detail(request, year, month, day, post, post_id):
     post_object = get_object_or_404(Post, slug=post, status='published',
                                     publish__year=year,
                                     publish__month=month,
-                                    publish__day=day)
+                                    publish__day=day,
+                                    id=post_id)
 
     post_points = PostPoint.objects.filter(post=post_object)
 
@@ -256,3 +258,29 @@ def edit_profile(request):
             user_form.save()
     return render(request, 'blog/account/profile.html', {'user_form' : user_form})
 
+def add_to_favourite(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.favourite.add(request.user)
+    return redirect('blog:post_detail', year=post.publish.year,
+                    month=post.publish.month,
+                    day=post.publish.day,
+                    post=post.slug,
+                    post_id=post.id)
+
+
+def delete_from_favourite(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.favourite.remove(request.user)
+    return redirect('blog:post_detail', year=post.publish.year,
+                    month=post.publish.month,
+                    day=post.publish.day,
+                    post=post.slug,
+                    post_id=post.id)
+
+def delete_from_favourite_in_dashboard(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.favourite.remove(request.user)
+    return redirect('blog:favourite_posts')
+
+def favourite_posts(request):
+    return render(request, 'blog/account/fav_posts.html', {})
