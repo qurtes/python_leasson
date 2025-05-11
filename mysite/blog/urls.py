@@ -1,6 +1,12 @@
-from django.urls import path
+from rest_framework import routers
+from .api import views as apiviews
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
+
+router = routers.DefaultRouter()
+router.register(r'posts', apiviews.PostViewSet)
+router.register(r'postspoints', apiviews.PostPointViewsSet)
 
 app_name = 'blog'
 urlpatterns = [
@@ -27,6 +33,17 @@ urlpatterns = [
     path('favourite_posts/', views.favourite_posts, name='favourite_posts'),
     path('delete_from_favourite_in_dashboard/<int:post_id>/', views.delete_from_favourite_in_dashboard,
          name='delete_from_favourite_in_dashboard'),
-
+    path('api/', include(router.urls)),
+    path('api/post/', apiviews.post_list, name='post'),
+    path('api/post/<pk>/', apiviews.post_detail, name='post_detail'),
+    path('api/post_create/', apiviews.post_create, name='post_create'),
+    path('api/post_point_create/', apiviews.post_point_create, name='post_point_create'),
+    path('api/comment_create/', apiviews.comment_create, name='comment_create'),
+    path('api/post_update/<pk>/', apiviews.post_update, name='post_update'),
+    path('api/post_point_update/<pk>/', apiviews.post_point_update, name='post_point_update'),
+    path('api/comment_update/<pk>/', apiviews.comment_update, name='comment_update'),
+    path('api/comment_delete/<pk>/', apiviews.comment_delete, name='comment_delete'),
+    path('api/post_delete/<pk>/', apiviews.post_delete, name='post_delete'),
+    path('api/post_point_delete/<pk>/', apiviews.post_point_delete, name='post_point_delete'),
 
 ]
